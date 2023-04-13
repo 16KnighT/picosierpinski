@@ -1,21 +1,39 @@
 pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
-	points = {
-	{63.5,0},
-	{0,127},
-	{127,127}
+tris = {{
+		a = {63.5,17.015},
+		b = {0,127},
+		c = {127,127}
+}}
+
+function construct(a,b,c)
+	line(a[1],a[2],b[1],b[2])
+	line(b[1],b[2],c[1],c[2])	
+	line(c[1],c[2],a[1],a[2])
+end
+
+function newtri(ia,ib,ic)
+	newtri = {
+		a = {(ia[1]+ib[1])/2, (ia[2]+ib[2])/2},
+		b = {(ib[1]+ic[1])/2, (ib[2]+ic[2])/2},
+		c = {(ic[1]+ia[1])/2, (ic[2]+ia[2])/2}
 	}
+	add(newtri,tris)
+	return newtri
+end
 
 function _init()
 	cls()
-	line(points[1][1],points[1][2],points[2][1],points[2][2])
-	line(points[2][1],points[2][2],points[3][1],points[3][2])	
-	line(points[3][1],points[3][2],points[1][1],points[1][2])	
+	construct(tris[1].a,tris[1].b,tris[1].c)
 end
 
+
 function _update()
-	
+	if btnp(❎) then 
+		points = newtri(tris[1].a,tris[1].b,tris[1].c)
+		construct(points.a,points.b,points.c)
+	end
 end
 
 function _draw()
